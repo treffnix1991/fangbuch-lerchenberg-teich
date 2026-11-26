@@ -68,6 +68,7 @@ alter table public.profiles enable row level security;
 alter table public.species  enable row level security;
 alter table public.catches  enable row level security;
 
+grant usage on schema public to anon, authenticated;
 revoke all on public.profiles, public.species, public.catches from anon, authenticated;
 grant select on public.profiles, public.species, public.catches to authenticated;
 
