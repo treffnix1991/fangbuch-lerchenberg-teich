@@ -1,4 +1,5 @@
 # Hält das kostenlose Supabase-Projekt aktiv (Free-Projekte werden nach längerer Inaktivität pausiert).
+# Adresse und Schlüssel sind dieselben öffentlichen Werte wie in config.js.
 name: Supabase wachhalten
 on:
   schedule:
@@ -9,10 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping
-        env:
-          URL: ${{ secrets.SUPABASE_URL }}
-          KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          curl -fsS -X POST "$URL/rest/v1/rpc/ping" \
-            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+          curl -fsS -X POST "https://tywnvetihcrjrltowena.supabase.co/rest/v1/rpc/ping" \
+            -H "apikey: sb_publishable_PiBsDgFhyASu7fb9s1k5VQ_O3bVL8pi" \
             -H "Content-Type: application/json" -d '{}'

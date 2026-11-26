@@ -58,7 +58,7 @@ Die genauen Limits der Gratis-Tarife vorher prüfen.
 2. Den **Inhalt** dieses Ordners hochladen (*Add file → Upload files*; die Ordner `fish` und `supabase` sowie die Datei `.nojekyll` nicht vergessen). *(Erledigt: liegt bereits in `treffnix1991/fangbuch-lerchenberg-teich`.)*
 3. *Settings → Pages*: *Deploy from a branch* → Branch `main`, Ordner `/ (root)` → Speichern. *(Erledigt.)*
 4. *(Entfällt ohne eigene Domain.)*
-5. Für das Wachhalten: *Settings → Secrets and variables → Actions* → zwei Secrets `SUPABASE_URL` und `SUPABASE_ANON_KEY` anlegen (gleiche Werte wie in `config.js`).
+5. *(Entfällt: Der Wachhalte-Workflow nutzt direkt die öffentlichen Werte aus `config.js`.)*
 6. Der Wachhalte-Workflow liegt bereits unter `.github/workflows/keepalive.yml`. Unter dem Tab *Actions* kann man ihn mit *Run workflow* einmal testen.
 
 ### 6. Eigene Domain (optional, kostet ca. 5–15 €/Jahr)
