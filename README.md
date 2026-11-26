@@ -26,8 +26,8 @@ laufen bei Supabase (Free-Tarif). Der frühere Python-Server (`server.py`) wird 
 *Authentication → Sign In / Providers → Email*: **Confirm email** muss an sein. Mindestlänge des Passworts auf 8 stellen.
 *Authentication → URL Configuration*: **Site URL** = `https://treffnix1991.github.io/fangbuch-lerchenberg-teich` (ohne `/` am Ende), unter *Redirect URLs* `https://treffnix1991.github.io/fangbuch-lerchenberg-teich/` (mit `/`) hinzufügen.
 
-### 3. E-Mail-Vorlagen (wichtig, sonst funktionieren die Links nicht)
-*Authentication → Emails → Templates*. In den beiden Vorlagen den Link so ersetzen:
+### 3. E-Mail-Vorlagen (optional, erst nach Schritt 4 möglich)
+Die Seite versteht auch die Standard-Links von Supabase, die Vorlagen müssen also nicht geändert werden. Supabase erlaubt das Ändern ohnehin erst mit eigenem Mailserver (Schritt 4). Danach kann man unter *Authentication → Emails → Templates* deutsche Texte einsetzen, z. B.:
 
 **Confirm signup** – Betreff: `Lerchenberg-Teich.de: Bitte E-Mail-Adresse bestätigen`
 ```html
@@ -43,7 +43,7 @@ laufen bei Supabase (Free-Tarif). Der frühere Python-Server (`server.py`) wird 
 <p><a href="{{ .SiteURL }}/#/passwort-zuruecksetzen/{{ .TokenHash }}">Neues Passwort festlegen</a></p>
 <p>Wenn du das nicht angefordert hast, ignoriere diese Nachricht – dein Passwort bleibt unverändert.</p>
 ```
-(Die Links funktionieren dadurch auch, wenn die Mail auf einem anderen Gerät geöffnet wird.)
+(Mit diesen Vorlagen funktionieren die Links auch, wenn die Mail auf einem anderen Gerät geöffnet wird.)
 
 ### 4. Mailversand (kostenlos)
 Der eingebaute Supabase-Mailversand liefert nur an Teammitglieder und sehr wenige Mails pro Stunde – für Mitglieder reicht er nicht.

@@ -914,6 +914,9 @@ async function route() {
     let content;
     const tokenRoute = hash.match(/^#\/(bestaetigen|passwort-zuruecksetzen)\/([\w-]{20,200})$/);
     if (tokenRoute) content = tokenRoute[1] === "bestaetigen" ? await viewVerify(tokenRoute[2]) : viewReset(tokenRoute[2]);
+    else if (hash === "#/neues-passwort" && recoveryVerified) content = viewReset(null);
+    else if (hash === "#/link-ungueltig") content = [h("div", { class: "card narrow" }, h("h1", { text: "Link ungültig" }), h("p", { class: "error", text: LINK_ERR }),
+      h("div", { class: "actions" }, h("a", { class: "btn", href: "#/login", text: "Zur Anmeldung" }), h("a", { class: "btn secondary", href: "#/passwort-vergessen", text: "Passwort vergessen?" })))];
     else if (hash === "#/passwort-vergessen") content = viewForgot();
     else if (!S.me) {
       content = viewAuth(hash === "#/registrieren" ? "register" : "login");
@@ -940,6 +943,20 @@ async function route() {
   }
 }
 
+/* Links aus den Standard-Mails von Supabase landen als #access_token=…&type=signup|recovery bzw. #error=… auf der Seite. */
+async function handleAuthRedirect() {
+  const raw = location.hash.slice(1);
+  if (!sb || !/(^|&)(access_token|error|error_code)=/.test(raw)) return null;
+  const p = new URLSearchParams(raw);
+  history.replaceState(null, "", location.pathname + location.search);
+  if (p.get("error") || p.get("error_code") || !p.get("access_token")) return "#/link-ungueltig";
+  const { error } = await sb.auth.setSession({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") || "" });
+  if (error) return "#/link-ungueltig";
+  if (p.get("type") === "recovery") { recoveryVerified = true; return "#/neues-passwort"; }
+  toast("✔ E-Mail-Adresse bestätigt.");
+  return "#/neu";
+}
+
 async function boot() {
   const me = await api("/api/me");
   S.lake = me.lake; S.me = me.user; S.csrf = me.csrf || null; S.today = me.today || new Date().toISOString().slice(0, 10);
@@ -951,7 +968,8 @@ async function boot() {
 }
 
 window.addEventListener("hashchange", () => route());
-boot().then(() => {
+handleAuthRedirect().catch(() => "#/link-ungueltig").then((target) => boot().then(() => target)).then((target) => {
+  if (target) { location.hash = target; return; }
   if (!location.hash || location.hash === "#/") location.hash = S.me ? "#/neu" : "#/login";
   else route();
 }).catch((e) => { document.getElementById("app").textContent = "Fehler beim Laden: " + e.message; });
