@@ -124,7 +124,7 @@ async function api(path, method = "GET", b = {}) {
     if (!GROUP_RE.test(gid)) fail("Bitte die Sportgruppen-ID angeben.");
     const password = pw();
     const { data, error } = await sb.auth.signUp({ email, password, options: {
-      data: { first_name: first, last_name: last, group_id: gid }, emailRedirectTo: location.origin + "/" } });
+      data: { first_name: first, last_name: last, group_id: gid }, emailRedirectTo: location.origin + location.pathname } });
     if (error) {
       if (/database error/i.test(error.message)) fail("Bitte Name und Sportgruppen-ID prüfen.");
       authFail(error);
@@ -142,13 +142,13 @@ async function api(path, method = "GET", b = {}) {
   if (key === "POST /api/logout") { await sb.auth.signOut(); return { ok: true }; }
 
   if (key === "POST /api/resend-verification") {
-    const { error } = await sb.auth.resend({ type: "signup", email: clean(b.email, 254).toLowerCase(), options: { emailRedirectTo: location.origin + "/" } });
+    const { error } = await sb.auth.resend({ type: "signup", email: clean(b.email, 254).toLowerCase(), options: { emailRedirectTo: location.origin + location.pathname } });
     if (error && (error.status === 429 || /rate limit|security purposes/i.test(error.message))) authFail(error);
     return { ok: true };
   }
 
   if (key === "POST /api/forgot") {
-    const { error } = await sb.auth.resetPasswordForEmail(clean(b.email, 254).toLowerCase(), { redirectTo: location.origin + "/" });
+    const { error } = await sb.auth.resetPasswordForEmail(clean(b.email, 254).toLowerCase(), { redirectTo: location.origin + location.pathname });
     if (error && (error.status === 429 || /rate limit|security purposes/i.test(error.message))) authFail(error);
     return { ok: true };   // immer dieselbe Antwort – verrät nicht, ob die Adresse registriert ist
   }
