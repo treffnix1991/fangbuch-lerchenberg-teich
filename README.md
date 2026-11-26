@@ -1,5 +1,8 @@
 # Fangbuch Lerchenberg-Teich.de – GitHub Pages + Supabase (kostenlos)
 
+**Adresse der Seite:** https://treffnix1991.github.io/fangbuch-lerchenberg-teich/
+(Die Domain `lerchenberg-teich.de` ist nicht registriert. Wie man später eine eigene Domain ergänzt, steht unten unter „Eigene Domain (optional)“.)
+
 Die Seite besteht aus statischen Dateien (GitHub Pages). Login, Datenbank, Regeln und Festschreibung der Fänge
 laufen bei Supabase (Free-Tarif). Der frühere Python-Server (`server.py`) wird nicht mehr gebraucht.
 
@@ -21,7 +24,7 @@ laufen bei Supabase (Free-Tarif). Der frühere Python-Server (`server.py`) wird 
 
 ### 2. Anmelde-Einstellungen
 *Authentication → Sign In / Providers → Email*: **Confirm email** muss an sein. Mindestlänge des Passworts auf 8 stellen.
-*Authentication → URL Configuration*: **Site URL** = `https://lerchenberg-teich.de`, unter *Redirect URLs* dieselbe Adresse (mit `/`) hinzufügen.
+*Authentication → URL Configuration*: **Site URL** = `https://treffnix1991.github.io/fangbuch-lerchenberg-teich` (ohne `/` am Ende), unter *Redirect URLs* `https://treffnix1991.github.io/fangbuch-lerchenberg-teich/` (mit `/`) hinzufügen.
 
 ### 3. E-Mail-Vorlagen (wichtig, sonst funktionieren die Links nicht)
 *Authentication → Emails → Templates*. In den beiden Vorlagen den Link so ersetzen:
@@ -44,23 +47,31 @@ laufen bei Supabase (Free-Tarif). Der frühere Python-Server (`server.py`) wird 
 
 ### 4. Mailversand (kostenlos)
 Der eingebaute Supabase-Mailversand liefert nur an Teammitglieder und sehr wenige Mails pro Stunde – für Mitglieder reicht er nicht.
-Richte unter *Authentication → Emails → SMTP Settings* einen eigenen SMTP-Zugang ein, z. B. mit dem Gratis-Tarif von **Brevo** (Konto anlegen, Absender/Domain `lerchenberg-teich.de` bestätigen, SMTP-Zugangsdaten eintragen) oder dem Postfach deines Domain-Providers. Absender z. B. `noreply@lerchenberg-teich.de`. Für gute Zustellung SPF/DKIM beim Mailanbieter einrichten. Die genauen Limits der Gratis-Tarife vorher prüfen.
+Richte unter *Authentication → Emails → SMTP Settings* einen eigenen SMTP-Zugang ein. Ohne eigene Domain am einfachsten mit einem vorhandenen Mailkonto, das SMTP erlaubt:
+- **Gmail:** Server `smtp.gmail.com`, Port `587`, Benutzer = deine Gmail-Adresse, Passwort = ein **App-Passwort** (Google-Konto → Sicherheit → Bestätigung in zwei Schritten einschalten → App-Passwörter). Absender = dieselbe Gmail-Adresse.
+- **GMX / Web.de:** SMTP im Postfach unter Einstellungen → POP3/IMAP freischalten, dann deren SMTP-Server mit Port 587 eintragen.
+- **Brevo** (Gratis-Tarif) geht auch, mit einer Gratis-Mailadresse als Absender landen die Mails aber eher im Spam.
+Die genauen Limits der Gratis-Tarife vorher prüfen.
 
 ### 5. GitHub-Repository
 1. https://github.com → *New repository* (z. B. `lerchenberg-teich`, public oder private).
-2. Den **Inhalt** dieses Ordners hochladen (*Add file → Upload files*; die Ordner `fish` und `supabase` sowie die Dateien `CNAME` und `.nojekyll` nicht vergessen).
-3. *Settings → Pages*: *Deploy from a branch* → Branch `main`, Ordner `/ (root)` → Speichern.
-4. *Settings → Pages → Custom domain*: `lerchenberg-teich.de`, danach **Enforce HTTPS** anhaken (sobald verfügbar).
+2. Den **Inhalt** dieses Ordners hochladen (*Add file → Upload files*; die Ordner `fish` und `supabase` sowie die Datei `.nojekyll` nicht vergessen). *(Erledigt: liegt bereits in `treffnix1991/fangbuch-lerchenberg-teich`.)*
+3. *Settings → Pages*: *Deploy from a branch* → Branch `main`, Ordner `/ (root)` → Speichern. *(Erledigt.)*
+4. *(Entfällt ohne eigene Domain.)*
 5. Für das Wachhalten: *Settings → Secrets and variables → Actions* → zwei Secrets `SUPABASE_URL` und `SUPABASE_ANON_KEY` anlegen (gleiche Werte wie in `config.js`).
 6. Der Wachhalte-Workflow liegt bereits unter `.github/workflows/keepalive.yml`. Unter dem Tab *Actions* kann man ihn mit *Run workflow* einmal testen.
 
-### 6. Domain (DNS beim Domain-Anbieter)
+### 6. Eigene Domain (optional, kostet ca. 5–15 €/Jahr)
+Nur nötig, wenn die Seite später unter `lerchenberg-teich.de` laufen soll. Domain bei einem Anbieter registrieren, dann:
+- in `Settings → Pages → Custom domain` die Domain eintragen und nach erfolgreicher DNS-Prüfung **Enforce HTTPS** anhaken,
+- in Supabase *Site URL* und *Redirect URLs* auf die neue Adresse ändern,
+- beim Domain-Anbieter:
 - `A`-Einträge für `lerchenberg-teich.de` auf `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
 - `CNAME` für `www` auf `DEIN-GITHUB-NAME.github.io`
 - Alte Einträge, die auf den früheren Server zeigen, entfernen. Die Umstellung kann bis zu einigen Stunden dauern. (IP-Adressen bitte in der GitHub-Doku nochmals prüfen.)
 
 ### 7. Erster Test
-1. https://lerchenberg-teich.de öffnen → *Neues Profil erstellen* → Mail bestätigen → anmelden. Dieses erste Profil ist Admin und automatisch freigeschaltet.
+1. https://treffnix1991.github.io/fangbuch-lerchenberg-teich/ öffnen → *Neues Profil erstellen* → Mail bestätigen → anmelden. Dieses erste Profil ist Admin und automatisch freigeschaltet.
 2. Mit einem zweiten Test-Profil prüfen, dass „Freischaltung ausstehend“ erscheint, und es dann als Admin unter *Admin → Mitglieder* freischalten.
 3. Admin → Schonmaße: Mindestmaße mit der Gewässerordnung abgleichen (Voreinstellung: RLP, Stand Recherche 19.11.2026, nicht amtlich geprüft).
 4. Einen Test-Fang eintragen. **Achtung: Fänge lassen sich nicht löschen.** Zum Testen daher ein Test-Profil verwenden und vor dem Echtbetrieb die Testfänge löschen (Befehl in der lokalen Datei `NOTFALL-Adminzugang.md`).
